@@ -1,2 +1,3 @@
--- Sniper Duels Loader
-loadstring(game:HttpGet("https://raw.githubusercontent.com/alphabuildacademy-tech/SniperDuelsCheats/main/main.lua"))()
+-- loader.lua
+-- Sniper Arena Loader
+loadstring(game:HttpGet("https://raw.githubusercontent.com/alphabuildacademy-tech/sniper-arena-cheat/main/main.lua"))()
