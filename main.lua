@@ -1,4 +1,4 @@
--- main.lua – Sniper Arena Cheats 
+-- main.lua – Sniper Arena Cheats (NoClip removed, stability improved)
 local UIS = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
@@ -1057,7 +1057,6 @@ local Cheat = {
     Aimbot = false,
     AutoFire = false,
     WallBang = false,
-    NoClip = false,
     ESP = false,
     TeamCheck = true,
     AimbotFOV = 120,
@@ -1207,18 +1206,6 @@ local function SetupWallBang()
     end)
 end
 
--- NoClip
-local function UpdateNoClip()
-    local char = LocalPlayer.Character
-    if char then
-        for _, part in ipairs(char:GetDescendants()) do
-            if part:IsA("BasePart") then
-                part.CanCollide = not Cheat.NoClip
-            end
-        end
-    end
-end
-
 -- ESP Boxes
 local espBoxes = {}
 local function UpdateESP()
@@ -1329,7 +1316,6 @@ end
 RunService.RenderStepped:Connect(function()
     SmoothAim()
     AutoFireLogic()
-    UpdateNoClip()
     UpdateESP()
     UpdateSkeletonESP()
     UpdateSkeletonPositions()
@@ -1355,12 +1341,6 @@ Sec:CreateSlider("Smoothness", 0.05, 1, Cheat.AimbotSmoothness, function(v) Chea
 Sec:CreateSlider("Auto Fire Delay", 0.05, 0.5, Cheat.AutoFireDelay, function(v) Cheat.AutoFireDelay = v end)
 Sec:CreateDropdown("Target Part", {"Head","HumanoidRootPart"}, Cheat.TargetPart, function(v) Cheat.TargetPart = v end)
 Sec:CreateToggle("Show FOV Circle", Cheat.ShowFOVCircle, function(v) Cheat.ShowFOVCircle = v; UpdateFOVCircle() end)
-
--- Movement Tab (NoClip only)
-local MoveTab = Window:CreateTab("Movement", "zap")
-local MoveSub = MoveTab:CreateSubTab("Movement", "map-pin")
-local MoveSec = MoveSub:CreateSection("Movement")
-MoveSec:CreateToggle("NoClip", Cheat.NoClip, function(v) Cheat.NoClip = v; UpdateNoClip() end)
 
 -- Visuals Tab
 local VisualTab = Window:CreateTab("Visuals", "eye")
@@ -1406,7 +1386,6 @@ SettingsSec:CreateButton("Load Config", function()
         Cheat.AimbotSmoothness = cfg.AimbotSmoothness
         Cheat.AutoFireDelay = cfg.AutoFireDelay
         Cheat.TargetPart = cfg.TargetPart
-        Cheat.NoClip = cfg.NoClip
         Cheat.ESP = cfg.ESP
         Cheat.BoxESP = cfg.BoxESP
         Cheat.ESPBoxSize = cfg.ESPBoxSize
