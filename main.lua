@@ -1,4 +1,3 @@
--- main.lua – Sniper Arena Cheats (right-click lock-on, auto-fire, full ESP)
 local UIS = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
@@ -8,7 +7,6 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- ========== UI LIBRARY ==========
 local Library = { Toggled = true, Accent = Color3.fromRGB(160, 60, 255), _blockDrag = false }
 local isMobile = UIS.TouchEnabled and not UIS.KeyboardEnabled
 
@@ -595,7 +593,6 @@ function Library:CreateWindow(title)
     return Window
 end
 
--- ========== CHEAT FEATURES ==========
 local Cheat = {
     Aimbot = false,
     AutoFire = false,
@@ -622,7 +619,6 @@ local Cheat = {
     ShowFOVCircle = true,
 }
 
--- Right-click state
 local rightClickPressed = false
 UIS.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton2 then
@@ -635,7 +631,6 @@ UIS.InputEnded:Connect(function(input)
     end
 end)
 
--- FOV Circle
 local fovCircle = nil
 local function UpdateFOVCircle()
     if Cheat.ShowFOVCircle and Cheat.Aimbot then
@@ -659,7 +654,6 @@ local function UpdateFOVCircle()
     end
 end
 
--- Get best target
 local function GetBestTarget()
     local bestTarget = nil
     local bestScore = Cheat.AimbotFOV
@@ -697,7 +691,6 @@ local function GetBestTarget()
     return bestTarget
 end
 
--- Smooth aim
 local currentTargetPart = nil
 local function SmoothAim()
     if not Cheat.Aimbot or not rightClickPressed then return end
@@ -710,18 +703,13 @@ local function SmoothAim()
             local delta = Vector2.new(sp.X - aimPos.X, sp.Y - aimPos.Y)
             if delta.Magnitude > 1 then
                 local smooth = delta * Cheat.AimbotSmoothness
-                local moved = false
                 if syn and syn.input then
                     syn.input(smooth.X, smooth.Y)
-                    moved = true
                 elseif mouse_move then
                     mouse_move(smooth.X, smooth.Y)
-                    moved = true
                 elseif mousemoverel then
                     mousemoverel(smooth.X, smooth.Y)
-                    moved = true
                 elseif pcall(function() VirtualInput:SendMouseMoveEvent(smooth.X, smooth.Y, Enum.UserInputType.MouseMovement) end) then
-                    moved = true
                 end
             end
         end
@@ -730,22 +718,18 @@ local function SmoothAim()
     end
 end
 
--- Improved Auto‑fire (simulates mouse click)
 local lastShot = 0
 local function FireWeapon()
-    -- Try VirtualInput (most common)
     local success = pcall(function()
         VirtualInput:SendMouseButtonEvent(Enum.UserInputType.MouseButton1, true)
         wait(0.05)
         VirtualInput:SendMouseButtonEvent(Enum.UserInputType.MouseButton1, false)
     end)
     if not success then
-        -- Fallback: try tool activation
         local tool = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildWhichIsA("Tool")
         if tool and tool:FindFirstChild("Activated") then
             pcall(function() tool:Activate() end)
         else
-            -- Last resort: use the weapon's remote if it exists
             local remote = ReplicatedStorage:FindFirstChild("PrimaryAction") or ReplicatedStorage:FindFirstChild("Fire")
             if remote and remote:IsA("RemoteEvent") then
                 pcall(function() remote:FireServer() end)
@@ -770,7 +754,6 @@ local function AutoFireLogic()
     end
 end
 
--- ESP Boxes
 local espBoxes = {}
 local function UpdateESP()
     for _, obj in pairs(espBoxes) do pcall(function() obj:Destroy() end) end
@@ -794,7 +777,6 @@ local function UpdateESP()
     end
 end
 
--- Skeleton ESP
 local skeletonLines = {}
 local function UpdateSkeletonESP()
     for _, item in pairs(skeletonLines) do
@@ -870,7 +852,6 @@ local function UpdateSkeletonPositions()
     end
 end
 
--- Main render loop
 RunService.RenderStepped:Connect(function()
     SmoothAim()
     AutoFireLogic()
@@ -880,10 +861,8 @@ RunService.RenderStepped:Connect(function()
     UpdateFOVCircle()
 end)
 
--- ========== UI CREATION ==========
 local Window = Library:CreateWindow("Sniper Arena Cheats")
 
--- Combat Tab
 local CombatTab = Window:CreateTab("Combat", "swords")
 local CombatSub = CombatTab:CreateSubTab("Aimbot", "target")
 local Sec = CombatSub:CreateSection("Aimbot Settings")
@@ -896,7 +875,6 @@ Sec:CreateSlider("Auto Fire Delay", 0.05, 0.5, Cheat.AutoFireDelay, function(v) 
 Sec:CreateDropdown("Target Part", {"Head","HumanoidRootPart"}, Cheat.TargetPart, function(v) Cheat.TargetPart = v end)
 Sec:CreateToggle("Show FOV Circle", Cheat.ShowFOVCircle, function(v) Cheat.ShowFOVCircle = v; UpdateFOVCircle() end)
 
--- Visuals Tab
 local VisualTab = Window:CreateTab("Visuals", "eye")
 local VisSub = VisualTab:CreateSubTab("ESP", "eye")
 local VisSec = VisSub:CreateSection("ESP")
@@ -920,7 +898,6 @@ BodySec:CreateToggle("Legs", Cheat.ShowLegs, function(v) Cheat.ShowLegs = v end)
 BodySec:CreateToggle("Forearms", Cheat.ShowForearms, function(v) Cheat.ShowForearms = v end)
 BodySec:CreateToggle("Shins", Cheat.ShowShins, function(v) Cheat.ShowShins = v end)
 
--- Settings Tab
 local SettingsTab = Window:CreateTab("Settings", "sliders")
 local SettingsSub = SettingsTab:CreateSubTab("Config", "save")
 local SettingsSec = SettingsSub:CreateSection("Configuration")
@@ -956,4 +933,4 @@ SettingsSec:CreateButton("Load Config", function()
     end
 end)
 
-print("Sniper Arena Cheats Loaded – Press RightShift to open UI")
+print("Kurby's Hub - Sniper Arena Cheats Loaded Successfully!")

@@ -2,12 +2,9 @@
 
 ## Features
 - Aimbot (Right‑Click to lock)
-- Silent Aim (No visual snap)
 - FOV Circle Display
-- WallBang (Shoot through walls)
 - AutoFire
-- NoClip
-- Fly
-- Speed Hack
-- JumpPower
-- Infinite Jump
+- ESP
+- Team Check
+- Wall Check
+- Skeleton ESP
